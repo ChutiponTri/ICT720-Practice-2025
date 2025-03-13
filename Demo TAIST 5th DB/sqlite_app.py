@@ -14,7 +14,6 @@ class MQTT_Conn():
         self.client.on_message = self.on_message
         mqtt_broker = "broker.emqx.io"
         mqtt_port = 1883
-        self.client.username_pw_set("ton-t-sim", "Chayawut16")
         self.client.connect(mqtt_broker, mqtt_port)
         
     def on_connect(self, client, userdata, connect_flags, reason_code, properties):
