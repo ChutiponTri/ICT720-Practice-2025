@@ -56,7 +56,7 @@ void wifi_status(void) {
  
 void sendToTelegram(String message) {
   const char* host = "api.telegram.org";
-  const char* botToken = "7971514818:AAGNoML_XsVN_Z0_r5OmLX0NYEj8uFE4iTw";  // Replace with your bot token
+  const char* botToken = "YOUR_BOT_TOKEN";  // Replace with your bot token
   const char* chatID = "7086001303";      // Replace with your chat ID
   
   WiFiClientSecure http_client;
