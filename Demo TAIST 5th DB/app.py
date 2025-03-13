@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 from pymongo import MongoClient
+from datetime import datetime
 from dotenv import load_dotenv
 import time
 import json
@@ -14,7 +15,7 @@ class MQTT_Conn():
         self.client.on_disconnect = self.on_disconnect
         self.client.on_publish = self.on_publish
         self.client.on_message = self.on_message
-        mqtt_broker = "192.168.137.1"
+        mqtt_broker = "mosquitto_db"
         mqtt_port = 1883
         self.client.username_pw_set("ton-t-sim", "Chayawut16")
         self.client.connect(mqtt_broker, mqtt_port)
@@ -34,6 +35,7 @@ class MQTT_Conn():
     def on_message(self, client, userdata, message:mqtt.MQTTMessage):
         print(message.topic, ": ", message.payload)
         payload = json.loads(message.payload)
+        payload["timestamp"] = datetime.now().isoformat()
         self.mongo.insert_one("ton", "data", payload)
         # payload["device"], payload["data"]
 

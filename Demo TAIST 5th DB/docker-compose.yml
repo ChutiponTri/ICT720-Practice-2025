@@ -23,6 +23,19 @@ services:
       ME_CONFIG_BASICAUTH: false
       TZ: "Asia/Bangkok"
 
+  mosq:
+    image: eclipse-mosquitto
+    container_name: mosquitto_db
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/config:/mosquitto/config  # Mount config file
+      - ./mosquitto/data:/mosquitto/data  # Data storage
+      - ./mosquitto/log:/mosquitto/log  # Log storage
+    ports:
+      - "1883:1883"  # MQTT Port
+    networks:
+      - taist-networks
+
   python:
     build: .
     container_name: database_python
