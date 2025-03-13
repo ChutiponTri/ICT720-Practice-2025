@@ -32,11 +32,11 @@ Listen on IPv4:       Connect to IPv4:
 
 This indicated that traffic on port `1883` was being redirected incorrectly. To fix the issue, I removed the problematic port proxy with:
 
-💡 **Note:** These commands were executed in **PowerShell with Administrator privileges**.
-
 ```sh
 netsh interface portproxy delete v4tov4 listenport=1883 listenaddress=0.0.0.0
 ```
+
+💡 **Note:** These commands were executed in **PowerShell with Administrator privileges**.
 
 After deleting the proxy entry and restarting my Docker container, the Local MQTT connection worked as expected!
 
