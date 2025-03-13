@@ -17,7 +17,6 @@ class MQTT_Conn():
         self.client.on_message = self.on_message
         mqtt_broker = "mosquitto_db"
         mqtt_port = 1883
-        self.client.username_pw_set("ton-t-sim", "Chayawut16")
         self.client.connect(mqtt_broker, mqtt_port)
         self.mongo = Mongo()
         
