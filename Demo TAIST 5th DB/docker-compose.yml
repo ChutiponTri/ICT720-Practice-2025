@@ -1,0 +1,44 @@
+version: "3.1"
+
+services:
+  mongo:
+    image: mongo
+    networks:
+      - taist-networks
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: etunmide007
+      MONGO_INITDB_ROOT_PASSWORD: Chayawut16
+      TZ: "Asia/Bangkok"
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    networks:
+      - taist-networks
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: etunmide007
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Chayawut16
+      ME_CONFIG_MONGODB_URL: mongodb://etunmide007:Chayawut16@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+      TZ: "Asia/Bangkok"
+
+  python:
+    build: .
+    container_name: database_python
+    command: ["python", "app.py"]
+    volumes:
+      - .:/python-docker  # Maps the current directory to /app inside the container
+    ports:
+      - "80:8080"
+    depends_on:
+      - mongo  # Ensure Mosquitto starts before Python app
+    networks:
+      - taist-networks
+    environment:
+      DB_ADDRESS: mongodb://etunmide007:Chayawut16@mongo:27017/
+      TZ: "Asia/Bangkok"
+
+networks:
+  taist-networks:
+    driver: bridge
