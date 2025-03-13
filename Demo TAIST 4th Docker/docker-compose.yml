@@ -1,0 +1,36 @@
+version: "3.1.2"
+
+services:
+  # Mosquitto MQTT Broker
+  mosq:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    volumes:
+      - ./mosquitto/config:/mosquitto/config  # Mount config file
+      - ./mosquitto/data:/mosquitto/data  # Data storage
+      - ./mosquitto/log:/mosquitto/log  # Log storage
+    ports:
+      - "1883:1883"  # MQTT Port
+    networks:
+      - app-networks
+
+  # Python App
+  python:
+    build: .
+    container_name: mqtt
+    command: ["python", "-u", "app.py"]
+    volumes:
+      - .:/python-docker  # Maps the current directory to /app inside the container
+    ports:
+      - "80:8080"
+    depends_on:
+      - mosq  # Ensure Mosquitto starts before Python app
+    networks:
+      - app-networks
+    environment:
+      TZ: "Asia/Bangkok"
+
+networks:
+  app-networks:
+    driver: bridge
