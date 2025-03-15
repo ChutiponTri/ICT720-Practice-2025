@@ -1,6 +1,6 @@
 from flask import Flask
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import json
 import os
@@ -50,6 +50,44 @@ def query_asset(asset_id):
         record_data["rssi"] = record["rssi"]
         resp["data"].append(record_data)
     return json.dumps(resp)
+
+@app.route("/api/station/10mins", methods=["GET"])
+def query_mins():
+    database = mongo_client["ton"]
+    collection = database["data"]
+    resp = {}
+    time_threshold = datetime.now() - timedelta(minutes=10)
+    data = collection.find({"timestamp": {"$gte": time_threshold}})
+    resp["status"] = "ok"
+    resp["data"] = []
+    for record in data:
+        record_data = {}
+        record_data["timestamp"] = record["timestamp"].isoformat()
+        record_data["device"] = record["device"]
+        record_data["rssi"] = record["rssi"]
+        resp["data"].append(record_data)
+    return json.dumps(resp)
+
+@app.route("/api/station/rssi", methods=["GET"])
+def query_rssi():
+    database = mongo_client["ton"]
+    collection = database["data"]
+    resp = {}
+    data = collection.find({"rssi": {"$gt": -60}})
+    resp["status"] = "ok"
+    resp["data"] = []
+    for record in data:
+        record_data = {}
+        record_data["timestamp"] = record["timestamp"].isoformat()
+        record_data["device"] = record["device"]
+        record_data["rssi"] = record["rssi"]
+        resp["data"].append(record_data)
+    return json.dumps(resp)
+
+@app.route("/", methods=["GET"])
+def root():
+    data = {"Hello": "World"}
+    return json.dumps(data)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -110,6 +110,26 @@ class SQLite():
         conn.commit()
         conn.close()
 
+    def get_from_station(self, station):
+        conn = self.get_db_connection()
+        cursor = conn.cursor()
+        query = "SELECT timestamp, device, rssi FROM taist WHERE station = ?"
+        cursor.execute(query,(station))
+        data = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return data
+    
+    def get_from_device(self, device):
+        conn = self.get_db_connection()
+        cursor = conn.cursor()
+        query = "SELECT timestamp, station, rssi FROM taist WHERE device = ?"
+        cursor.execute(query,(device))
+        data = cursor.fetchall()
+        conn.commit()
+        conn.close()
+        return data
+
 if __name__ == '__main__':
     client = MQTT_Conn()
     client.run()

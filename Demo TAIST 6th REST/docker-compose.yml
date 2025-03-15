@@ -14,7 +14,7 @@ services:
     networks:
       - my-networks
     environment:
-      DB_ADDRESS: mongodb://username:password@mongo:27017/
+      DB_ADDRESS: mongodb://etunmide007:Chayawut16@mongo:27017/
       TZ: "Asia/Bangkok"
 
   # REST App
@@ -30,7 +30,7 @@ services:
     networks:
       - my-networks
     environment:
-      DB_ADDRESS: mongodb://username:password@mongo:27017/
+      DB_ADDRESS: mongodb://etunmide007:Chayawut16@mongo:27017/
       TZ: "Asia/Bangkok"
 
   # Mosquitto Broker
@@ -55,8 +55,8 @@ services:
     networks:
       - my-networks
     environment:
-      MONGO_INITDB_ROOT_USERNAME: username
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: etunmide007
+      MONGO_INITDB_ROOT_PASSWORD: Chayawut16
       TZ: "Asia/Bangkok"
 
   # Mongo Express
@@ -67,9 +67,9 @@ services:
     networks:
       - my-networks
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: username
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      ME_CONFIG_MONGODB_URL: mongodb://username:password@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: etunmide007
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Chayawut16
+      ME_CONFIG_MONGODB_URL: mongodb://etunmide007:Chayawut16@mongo:27017/
       ME_CONFIG_BASICAUTH: false
       TZ: "Asia/Bangkok"
 
