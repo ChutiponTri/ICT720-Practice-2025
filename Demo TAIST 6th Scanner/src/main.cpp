@@ -25,7 +25,7 @@ BLEScan *pBLEScan;
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
 JsonDocument doc;
-String clientName = "Grace" + String(random(0xffff), HEX);
+String clientName = "Name" + String(random(0xffff), HEX);
 
 // callback for BLE scan
 class CustomAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
