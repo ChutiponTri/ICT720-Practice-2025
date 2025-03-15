@@ -1,6 +1,6 @@
 FROM python:3.12
 
-WORKDIR /python-docker
+WORKDIR /mqtt_app
 
 COPY requirements.txt ./
 
