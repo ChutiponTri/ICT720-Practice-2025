@@ -1,0 +1,78 @@
+version: "3.1"
+
+services:
+  # MQTT App
+  mqtt_app:
+    build: ./mqtt_app
+    command: ["python", "/mqtt_app/app.py"]
+    depends_on:
+      - mosquitto
+      - mongo
+    volumes:
+      - ./mqtt_app:/mqtt_app  # Maps the current directory to /app inside the container
+      - ./mqtt_app/database:/mqtt_app/database  # Add this line if needed
+    networks:
+      - my-networks
+    environment:
+      DB_ADDRESS: mongodb://etunmide007:Chayawut16@mongo:27017/
+      TZ: "Asia/Bangkok"
+
+  # REST App
+  rest_app:
+    build: ./rest_app
+    depends_on:
+      - mongo
+    volumes:
+      - ./rest_app:/rest_app  # Maps the current directory to /app inside the container
+    ports:
+      - "5000:5000"
+    networks:
+      - my-networks
+    environment:
+      DB_ADDRESS: mongodb://etunmide007:Chayawut16@mongo:27017/
+      TZ: "Asia/Bangkok"
+
+  # Mosquitto Broker
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto_rssi
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+    networks:
+      - my-networks
+
+  # Mongo Image
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - my-networks
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: etunmide007
+      MONGO_INITDB_ROOT_PASSWORD: Chayawut16
+      TZ: "Asia/Bangkok"
+
+  # Mongo Express
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    networks:
+      - my-networks
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: etunmide007
+      ME_CONFIG_MONGODB_ADMINPASSWORD: Chayawut16
+      ME_CONFIG_MONGODB_URL: mongodb://etunmide007:Chayawut16@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+      TZ: "Asia/Bangkok"
+
+networks:
+  my-networks:
+    driver: bridge
+    
