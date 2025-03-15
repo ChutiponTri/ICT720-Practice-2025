@@ -11,5 +11,3 @@ if resp.status_code == 200:
     print(resp.json())
 else:
     print(resp.status_code, resp.text)
-
-
