@@ -22,7 +22,7 @@ int mem_idx = 0;
 int32_t mic_samples[2 * 1600];      // 2 Memmory index -> Allocate = 2X
 JsonDocument doc;
 float avg_val = 0.0;
-String clientName = "Grace-" + String(random(0xffff), HEX);
+String clientName = "Name-" + String(random(0xffff), HEX);
 String chipId;
 
 // Function Prototypes
