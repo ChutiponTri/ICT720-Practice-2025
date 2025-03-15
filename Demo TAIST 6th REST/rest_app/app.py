@@ -11,14 +11,14 @@ mongo_client = MongoClient(os.getenv("DB_ADDRESS"))
 
 @app.route('/api/station/<station_id>', methods=['GET'])
 def query_station(station_id):
-    db = mongo_client.taist_db
-    db_col = db.ble_logs
+    database = mongo_client["ton"]
+    collection = database["data"]
     resp = {}
     if station_id is None:
         resp['status'] = 'error'
         resp['message'] = 'station_id is required'
         return json.dumps(resp)
-    data = db_col.find({"station": station_id})
+    data = collection.find({"station": station_id})
     resp['status'] = 'ok'
     resp['station'] = station_id
     resp['data'] = []
@@ -32,14 +32,14 @@ def query_station(station_id):
 
 @app.route('/api/asset/<asset_id>', methods=['GET'])
 def query_asset(asset_id):
-    db = mongo_client.taist_db
-    db_col = db.ble_logs
+    database = mongo_client["ton"]
+    collection = database["data"]
     resp = {}
     if asset_id is None:
         resp['status'] = 'error'
         resp['message'] = 'asset_id is required'
         return json.dumps(resp)
-    data = db_col.find({"device": asset_id})
+    data = collection.find({"device": asset_id})
     resp['status'] = 'ok'
     resp['asset'] = asset_id
     resp['data'] = []
