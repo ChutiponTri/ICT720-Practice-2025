@@ -11,21 +11,20 @@ load_dotenv()
 
 class MQTT_Conn():
     def __init__(self):
-        self.client = mqtt.Client(client_id="ton-mqtt-client", callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+        self.client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
         self.client.on_publish = self.on_publish
         self.client.on_message = self.on_message
-        mqtt_broker = "mosquitto_rssi"
-        mqtt_port = 1883
-        self.client.username_pw_set("ton-t-sim", "Chayawut16")
+        mqtt_broker = os.getenv("MQTT_BROKER")
+        mqtt_port = int(os.getenv("MQTT_PORT", 1883))
         self.client.connect(mqtt_broker, mqtt_port)
         self.sqlite = SQLite()
         self.mongo = Mongo()
         
     def on_connect(self, client, userdata, connect_flags, reason_code, properties):
         print(f"Connected {reason_code}")
-        self.client.subscribe("ict720/ton/#")
+        self.client.subscribe(os.getenv("MQTT_TOPIC"))
 
     def on_disconnect(self, client, userdata, disconnect_flags, reason_code, properties):
         print(f"Disconnected reason {reason_code}")
@@ -55,7 +54,7 @@ class MQTT_Conn():
                 "device": device, 
                 "rssi": rssi
             }
-            self.mongo.insert_one("ton", "data", data)
+            self.mongo.insert_one(os.getenv("DB_NAME"), os.getenv("DB_COLLECTION"), data)
             print("Inserted to MongoDB")
 
     def publish(self, topic, message:str):
@@ -85,7 +84,7 @@ class SQLite():
         self.create_table()
 
     def get_db_connection(self):
-        conn = sqlite3.connect("/mqtt_app/database/ton.db")
+        conn = sqlite3.connect(f"/mqtt_app/database/{os.getenv("DB_NAME")}.db")
         return conn
     
     def create_table(self):
