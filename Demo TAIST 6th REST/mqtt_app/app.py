@@ -34,28 +34,31 @@ class MQTT_Conn():
         print(mid, reason_code)
 
     def on_message(self, client, userdata, message:mqtt.MQTTMessage):
-        print(message.topic, ": ", message.payload)
-        if message.topic.split('/')[-1] == "beat":
-            data = json.loads(message.payload)
-            print(f"Device: {data['mac']}")
-            return
-        if message.topic.split('/')[-1] == "data":
-            data = json.loads(message.payload)
-            print(f"Device: {data['name']}")
-            # insert to SQLite
-            station = message.topic.split('/')[2]
-            device = data['name']
-            rssi = data['rssi']
-            self.sqlite.insert_one(station, device, rssi)
-            # insert to MongoDB
-            data = {
-                "timestamp": datetime.now(), 
-                "station": station, 
-                "device": device, 
-                "rssi": rssi
-            }
-            self.mongo.insert_one(os.getenv("DB_NAME"), os.getenv("DB_COLLECTION"), data)
-            print("Inserted to MongoDB")
+        try:
+            print(message.topic, ": ", message.payload)
+            if message.topic.split('/')[-1] == "beat":
+                data = json.loads(message.payload)
+                print(f"Device: {data['mac']}")
+                return
+            if message.topic.split('/')[-1] == "data":
+                data = json.loads(message.payload)
+                print(f"Device: {data['name']}")
+                # insert to SQLite
+                station = message.topic.split('/')[2]
+                device = data['name']
+                rssi = data['rssi']
+                self.sqlite.insert_one(station, device, rssi)
+                # insert to MongoDB
+                data = {
+                    "timestamp": datetime.now(), 
+                    "station": station, 
+                    "device": device, 
+                    "rssi": rssi
+                }
+                self.mongo.insert_one(os.getenv("DB_NAME"), os.getenv("DB_COLLECTION"), data)
+                print("Inserted to MongoDB")
+        except Exception as e:
+            print(e)
 
     def publish(self, topic, message:str):
         self.client.publish(topic, message.encode())
