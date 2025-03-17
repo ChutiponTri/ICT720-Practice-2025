@@ -65,6 +65,39 @@ def query_asset(asset_id):
         resp["data"].append(record_data)
     return jsonify(resp)
 
+@app.route("/api/station/num", methods=["GET"])
+def query_num_dev(station_id):
+    database = mongo_client[os.getenv("DB_NAME")]
+    collection = database[os.getenv("DB_COLLECTION")]
+    resp = {}
+    if station_id is None:
+        resp["status"] = "error"
+        resp["message"] = "station_id is required"
+        return jsonify(resp)
+    rssi_cond = int(request.args.get('rssi', -60))
+    mins_cond = int(request.args.get('mins', 10))
+    query = {
+        "station": station_id,
+        "timestamp": {"$gt": datetime.now() - timedelta(minutes=mins_cond)},
+        "rssi": {"$gt": rssi_cond}
+    }
+    data = collection.find(query)
+    resp["status"] = "ok"
+    resp["station"] = station_id
+    resp["data"] = []
+    devices = []
+    for record in data:
+        if data['device'] in devices:
+            continue
+        devices.append(data['device'])
+        record_data = {}
+        record_data["timestamp"] = record["timestamp"].isoformat()
+        record_data["device"] = record["device"]
+        record_data["rssi"] = record["rssi"]
+        resp["data"].append(record_data)
+        resp["num"] = devices
+    return jsonify(resp)
+
 @app.route("/api/station/10mins", methods=["GET"])
 def query_mins():
     database = mongo_client[os.getenv("DB_NAME")]
