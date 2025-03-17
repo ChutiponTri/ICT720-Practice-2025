@@ -18,7 +18,7 @@ def query_station(station_id):
         resp["status"] = "error"
         resp["message"] = "station_id is required"
         return json.dumps(resp)
-    data = collection.find({"station": station_id})
+    data = collection.find({"station": station_id}).sort("timestamp", -1).limit(10)
     resp["status"] = "ok"
     resp["station"] = station_id
     resp["data"] = []
@@ -39,7 +39,7 @@ def query_asset(asset_id):
         resp["status"] = "error"
         resp["message"] = "asset_id is required"
         return json.dumps(resp)
-    data = collection.find({"device": asset_id})
+    data = collection.find({"device": asset_id}).sort("timestamp", -1).limit(10)
     resp["status"] = "ok"
     resp["asset"] = asset_id
     resp["data"] = []
