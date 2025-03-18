@@ -12,9 +12,10 @@
 #define pass "late1978"
 #define mqtt_broker "192.168.137.1"
 #define mqtt_port 1883
-#define mqtt_beat "ict720/ton/esp32/beat"
-#define mqtt_topic "ict720/ton/esp32/data"
-#define mqtt_cmd "ict720/ton/esp32/cmd"
+#define mqtt_beat "ict720/ton/station1/beat"
+#define mqtt_topic "ict720/ton/station1/data"
+#define mqtt_cmd "ict720/ton/station1/cmd"
+#define dev_name "Asset"
 
 // function prototypes
 void on_message(char* topic, byte* payload, unsigned int length);
@@ -25,7 +26,7 @@ BLEScan *pBLEScan;
 WiFiClient espClient;
 PubSubClient mqtt_client(espClient);
 JsonDocument doc;
-String clientName = "Name" + String(random(0xffff), HEX);
+String clientName = "Ton-Client-" + String(random(0xffff), HEX);
 
 // callback for BLE scan
 class CustomAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
@@ -77,7 +78,7 @@ void loop() {
   for (int i = 0; i < foundDevices.getCount(); i++) {
     BLEAdvertisedDevice device = foundDevices.getDevice(i);
     if (device.haveName()) {
-      if (strncmp(device.getName().c_str(), "Ton-M5StickC", strlen("Ton-M5StickC")) == 0) {
+      if (strncmp(device.getName().c_str(), dev_name, strlen(dev_name)) == 0) {
         Serial.printf("Found Asset: %s\n", device.getName().c_str());
         doc.clear();
         doc["millis"] = millis();
