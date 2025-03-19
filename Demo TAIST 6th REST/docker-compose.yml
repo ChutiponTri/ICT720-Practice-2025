@@ -73,9 +73,9 @@ services:
     networks:
       - my-networks
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
       TZ: "Asia/Bangkok"
+    .env_file:
+      - .env
 
   # Mongo Express
   mongo-express:
@@ -85,11 +85,9 @@ services:
     networks:
       - my-networks
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${PASSWORD}
-      ME_CONFIG_MONGODB_URL: ${DB_ADDRESS}
-      ME_CONFIG_BASICAUTH: false
       TZ: "Asia/Bangkok"
+    .env_file:
+      - .env
 
 networks:
   my-networks:
