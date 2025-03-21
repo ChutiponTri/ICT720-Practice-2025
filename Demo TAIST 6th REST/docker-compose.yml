@@ -74,7 +74,7 @@ services:
       - my-networks
     environment:
       TZ: "Asia/Bangkok"
-    .env_file:
+    env_file:
       - .env
 
   # Mongo Express
@@ -86,7 +86,7 @@ services:
       - my-networks
     environment:
       TZ: "Asia/Bangkok"
-    .env_file:
+    env_file:
       - .env
 
 networks:
