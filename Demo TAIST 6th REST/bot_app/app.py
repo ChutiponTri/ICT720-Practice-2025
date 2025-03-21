@@ -76,6 +76,7 @@ from linebot.v3.messaging import (
     LocationAction,
     ErrorResponse
 )
+from gemini import Assistance
 
 # Get environment variables
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
@@ -83,6 +84,7 @@ channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 liff_id = os.getenv("LIFF_ID", None)
 rest_station_api = os.getenv("REST_STATION_API", None)
 rest_asset_api = os.getenv("REST_ASSET_API", None)
+ai_assistance = Assistance()
 if channel_secret is None or channel_access_token is None or rest_station_api is None or rest_asset_api is None:
     print("Specify LINE_CHANNEL_SECRET and LINE_CHANNEL_ACCESS_TOKEN as environment variables.")
     sys.exit(1)
@@ -115,7 +117,8 @@ def handle_text_message(event):
         if text.startswith("#"):
             req = requests.get(rest_station_api + text[1:])
             data = req.json()
-            resp_text = str(data["data"])
+            # resp_text = str(data["data"])
+            resp_text = ai_assistance.prompt(text, data).content
             line_bot_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
@@ -126,7 +129,8 @@ def handle_text_message(event):
         elif text.startswith("*"):
             req = requests.get(rest_asset_api + text[1:])
             data = req.json()
-            resp_text = str(data["data"])
+            # resp_text = str(data["data"])
+            resp_text = ai_assistance.prompt(text, data).content
             line_bot_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,

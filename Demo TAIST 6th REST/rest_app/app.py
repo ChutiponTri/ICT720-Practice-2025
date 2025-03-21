@@ -19,7 +19,7 @@ def query_station(station_id):
         resp["message"] = "station_id is required"
         return jsonify(resp)
     query = {"station": station_id,}
-    data = collection.find(query).sort("timestamp", -1).limit(10)
+    data = collection.find(query).sort("timestamp", -1)
     resp["status"] = "ok"
     resp["station"] = station_id
     resp["data"] = []
@@ -41,7 +41,7 @@ def query_asset(asset_id):
         resp["message"] = "asset_id is required"
         return jsonify(resp)
     query = {"device": asset_id}
-    data = collection.find(query).sort("timestamp", -1).limit(10)
+    data = collection.find(query).sort("timestamp", -1)
     resp["status"] = "ok"
     resp["asset"] = asset_id
     resp["data"] = []
