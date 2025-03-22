@@ -79,6 +79,8 @@ from linebot.v3.messaging import (
 from gemini import Assistance
 
 # Get environment variables
+devices = ['Asset-T0', 'Asset-T1', 'Asset-T2', 'Ton-M5StickC-0', 'Ton-M5StickC-1', 'Ton-M5StickC-2', 'Ton-M5StickC-3']
+stations = ["station1", "station2", "station3"]
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 liff_id = os.getenv("LIFF_ID", None)
@@ -114,29 +116,33 @@ def handle_text_message(event):
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         # check station
-        if text.startswith("#"):
-            req = requests.get(rest_station_api + text[1:])
-            data = req.json()
-            # resp_text = str(data["data"])
-            resp_text = ai_assistance.prompt(text, data).content
-            line_bot_api.reply_message(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=resp_text)]
+        station = [i for i in stations if i.lower() in text.lower()]
+        device = [i for i in devices if i.lower() in text.lower()]
+        if station:
+            for i in station:
+                req = requests.get(rest_station_api + i)
+                data = req.json()
+                # resp_text = str(data["data"])
+                resp_text = ai_assistance.prompt(text, data).content
+                line_bot_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[TextMessage(text=resp_text)]
+                    )
                 )
-            )
         # check asset
-        elif text.startswith("*"):
-            req = requests.get(rest_asset_api + text[1:])
-            data = req.json()
-            # resp_text = str(data["data"])
-            resp_text = ai_assistance.prompt(text, data).content
-            line_bot_api.reply_message(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=resp_text)]
+        elif device:
+            for i in device:
+                req = requests.get(rest_asset_api + i)
+                data = req.json()
+                # resp_text = str(data["data"])
+                resp_text = ai_assistance.prompt(text, data).content
+                line_bot_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[TextMessage(text=resp_text)]
+                    )
                 )
-            )
         # not commands
         else:
             line_bot_api.reply_message(
