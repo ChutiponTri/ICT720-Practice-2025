@@ -6,10 +6,10 @@ services:
     networks:
       - taist-networks
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: "Asia/Bangkok"
-
+      
   mongo-express:
     image: mongo-express
     ports:
@@ -17,9 +17,9 @@ services:
     networks:
       - taist-networks
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: ${DB_ADDRESS}
       ME_CONFIG_BASICAUTH: false
       TZ: "Asia/Bangkok"
 
@@ -49,7 +49,7 @@ services:
     networks:
       - taist-networks
     environment:
-      DB_ADDRESS: mongodb://root:example@mongo:27017/
+      DB_ADDRESS: ${DB_ADDRESS}
       TZ: "Asia/Bangkok"
 
 networks:
