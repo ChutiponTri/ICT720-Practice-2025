@@ -73,6 +73,8 @@ services:
     networks:
       - my-networks
     environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: "Asia/Bangkok"
     env_file:
       - .env
@@ -85,6 +87,10 @@ services:
     networks:
       - my-networks
     environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: ${DB_ADDRESS}
+      ME_CONFIG_BASICAUTH: false
       TZ: "Asia/Bangkok"
     env_file:
       - .env
