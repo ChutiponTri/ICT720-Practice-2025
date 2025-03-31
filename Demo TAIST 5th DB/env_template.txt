@@ -1,0 +1,3 @@
+DB_USERNAME = ton
+DB_PASSWORD = Chutipon
+DB_ADDRESS = mongodb://ton:Chutipon@mongo:27017/
