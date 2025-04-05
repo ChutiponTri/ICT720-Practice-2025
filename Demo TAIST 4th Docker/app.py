@@ -28,13 +28,6 @@ class MQTT_Conn():
 
     def on_message(self, client, userdata, message:mqtt.MQTTMessage):
         print(message.topic, ": ", message.payload)
-        payload = json.loads(message.payload)
-        payload["timestamp"] = datetime.now().isoformat()
-        response = requests.post(url="https://ict720-ab644-default-rtdb.asia-southeast1.firebasedatabase.app/taist.json", json=payload)
-        if response.status_code == 200:
-            print(f"Success {response.text}")
-        else:
-            print("Failed", response.status_code, response.text)
 
     def publish(self, topic, message:str):
         self.client.publish(topic, message.encode())
