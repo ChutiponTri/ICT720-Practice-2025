@@ -126,7 +126,7 @@ void reconnect(void) {
 void fetchTelegram(void) {
   HTTPClient http;
   String url = "https://api.telegram.org/bot" + String(TELEGRAM_TOKEN) + "/getUpdates";
-  http.begin(url);  // ใช้ HTTPS ได้โดยไม่ต้องใส่ cert เพราะ ESP32 รองรับ
+  http.begin(url);  
 
   int httpCode = http.GET();
   if (httpCode > 0) {
