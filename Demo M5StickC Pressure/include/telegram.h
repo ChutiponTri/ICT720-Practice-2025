@@ -4,7 +4,7 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
-#define TELEGRAM_TOKEN "7453097438:AAGM4fvrlrhinbZemrHwuBTHQj_7d59-02E"
+#define TELEGRAM_TOKEN "YOUR_TELEGRAM_BOT_TOKEN"
 
 void telegram_task(void* pvParam);
 void fetchTelegram(void);
